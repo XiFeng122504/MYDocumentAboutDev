@@ -15,11 +15,11 @@
    - 技术：C++、Epoll、非阻塞 I/O、边缘触发（ET）
    - 状态：**已完成**，可作为参考
 
-2. **Qt 客户端**（位于 `client/`）
+2. **Qt 客户端**（项目根目录）
    - 基于 Qt5 的跨平台客户端程序
    - 功能：连接服务器、用户认证、文件上传、消息通信
    - 技术：Qt 5.12、C++17、CMake
-   - 状态：**开发中**（当前进度 45-50%）
+   - 状态：**开发中**（当前进度 60%）
 
 ### 核心目标
 - ✅ **主要目标**：带学习者从零开始构建一个完整的网络客户端
@@ -210,24 +210,28 @@
 ### 完整目录结构
 
 ```
-client/
+QtClient/                       # 项目根目录
 ├── CMakeLists.txt              # 构建配置（已完成）
 ├── main.cpp                    # 程序入口（已完成）
-├── claude.md                   # 详细学习日志（持续更新）
+├── docs/                       # 文档目录（git submodule）
+│   └── QtCSLearn/QtClient/
+│       ├── AI-GUIDE.md        # AI助手指导
+│       ├── LEARNING-LOG.md    # 详细学习日志
+│       └── OVERVIEW.md        # 项目总览
 │
 ├── core/                       # 核心层：协议和网络
 │   ├── Protocol.h             # 协议接口定义（已完成）
-│   ├── Protocol.cpp           # 协议实现（进行中）
-│   ├── NetworkClient.h        # 网络客户端接口（待创建）
-│   └── NetworkClient.cpp      # 网络客户端实现（待创建）
+│   ├── Protocol.cpp           # 协议实现（已完成）
+│   ├── NetworkClient.h        # 网络客户端接口（已完成）
+│   └── NetworkClient.cpp      # 网络客户端实现（已完成）
 │
 ├── services/                   # 业务逻辑层
-│   ├── AuthService.h          # 认证服务接口（待创建）
-│   ├── AuthService.cpp        # 认证服务实现（待创建）
-│   ├── FileUploadService.h    # 文件上传服务接口（待创建）
-│   ├── FileUploadService.cpp  # 文件上传实现（待创建）
-│   ├── EchoService.h          # Echo服务接口（待创建）
-│   └── EchoService.cpp        # Echo服务实现（待创建）
+│   ├── AuthService.h          # 认证服务接口（已完成）
+│   ├── AuthService.cpp        # 认证服务实现（已完成）
+│   ├── FileUploadService.h    # 文件上传服务接口（已完成）
+│   ├── FileUploadService.cpp  # 文件上传实现（已完成）
+│   ├── EchoService.h          # Echo服务接口（已完成）
+│   └── EchoService.cpp        # Echo服务实现（已完成）
 │
 ├── models/                     # 数据模型层
 │   ├── User.h                 # 用户模型（待创建）
@@ -243,10 +247,13 @@ client/
 │
 └── draft/                      # 测试和学习代码（临时）
     ├── CMakeLists.txt         # 测试构建配置
-    ├── draft.h                # Protocol实现测试
-    ├── test_qbytearray.cpp    # QByteArray学习
-    ├── test_4bytes.cpp        # 4字节整数测试
-    └── test_append_vs_stream.cpp  # append vs stream对比
+    ├── test_protocol.cpp      # 协议编码测试
+    ├── test_decode.cpp        # 协议解码测试
+    ├── test_socket.cpp        # Socket测试
+    ├── test_network_client.cpp # NetworkClient测试
+    ├── test_EchoService.cpp   # EchoService测试
+    ├── test_AuthService.cpp   # AuthService测试
+    └── test_FileUploadService.cpp  # FileUploadService测试
 ```
 
 ### 核心模块详细说明
@@ -263,9 +270,7 @@ client/
   static QString getPayloadAsString(const Message& message);
   ```
 - **依赖**：Qt Core (QByteArray, QDataStream)
-- **状态**：
-  - Protocol.h ✅ 已完成
-  - Protocol.cpp 🔄 进行中（encodeMessage已实现，decodeMessage待实现）
+- **状态**：✅ 已完成
 
 **NetworkClient.h / NetworkClient.cpp**
 - **职责**：管理TCP连接、发送接收数据
@@ -285,7 +290,7 @@ client/
   };
   ```
 - **依赖**：Qt Network (QTcpSocket), Protocol
-- **状态**：📋 待创建
+- **状态**：✅ 已完成
 
 #### 2️⃣ Services 层（业务逻辑层）
 
@@ -303,17 +308,17 @@ client/
   };
   ```
 - **依赖**：NetworkClient, Protocol
-- **状态**：📋 待创建
+- **状态**：✅ 已完成
 
 **FileUploadService.h / FileUploadService.cpp**
 - **职责**：处理文件上传逻辑（分块、进度）
 - **依赖**：NetworkClient, Protocol
-- **状态**：📋 待创建
+- **状态**：✅ 已完成
 
 **EchoService.h / EchoService.cpp**
 - **职责**：处理Echo测试（最简单，建议先实现）
 - **依赖**：NetworkClient, Protocol
-- **状态**：📋 待创建
+- **状态**：✅ 已完成
 
 #### 3️⃣ Models 层（数据模型层）
 
@@ -339,21 +344,21 @@ client/
 
 ### 开发顺序规范
 
-**阶段1：Core层** ⬅️ **当前阶段**
+**阶段1：Core层** ✅ **已完成**
 1. ✅ Protocol.h（已完成）
-2. 🔄 Protocol.cpp::encodeMessage()（已完成）
-3. 📋 Protocol.cpp::decodeMessage()（下一步）
-4. 📋 Protocol.cpp::辅助函数
-5. 📋 NetworkClient.h + .cpp
+2. ✅ Protocol.cpp::encodeMessage()（已完成）
+3. ✅ Protocol.cpp::decodeMessage()（已完成）
+4. ✅ Protocol.cpp::辅助函数（已完成）
+5. ✅ NetworkClient.h + .cpp（已完成）
 
-**阶段2：Services层**
-1. EchoService（最简单，先做）
-2. AuthService
-3. FileUploadService
+**阶段2：Services层** ✅ **已完成**
+1. ✅ EchoService（已完成）
+2. ✅ AuthService（已完成）
+3. ✅ FileUploadService（已完成）
 
-**阶段3：UI层**
-1. LoginWindow
-2. MainWindow
+**阶段3：UI层** ⬅️ **当前阶段**
+1. 📋 LoginWindow（下一步）
+2. 📋 MainWindow
 
 **阶段4：集成测试**
 
@@ -363,11 +368,12 @@ client/
    - 有 `.h` 必须有对应的 `.cpp`（除了纯模板类）
 
 2. **文件位置固定**
-   - Core层 → `client/core/`
-   - Services层 → `client/services/`
-   - Models层 → `client/models/`
-   - UI层 → `client/ui/`
-   - 测试代码 → `client/draft/`
+   - Core层 → `core/`
+   - Services层 → `services/`
+   - Models层 → `models/`
+   - UI层 → `ui/`
+   - 测试代码 → `draft/`
+   - 文档 → `docs/` (git submodule)
 
 3. **命名规范**
    - 类名：大驼峰（如 `NetworkClient`）
@@ -387,29 +393,28 @@ client/
 
 | 文件路径 | 作用 | 状态 |
 |---------|------|------|
-| `client/core/Protocol.h` | 协议层接口定义 | 已定义 |
-| `client/core/Protocol.cpp` | 协议层实现 | 未创建 |
-| `client/claude.md` | 详细学习日志 | 持续更新 |
-| `client/draft/` | 测试代码目录 | 持续添加 |
-| `client/CMakeLists.txt` | 构建配置 | 已完成 |
-| `client/main.cpp` | 程序入口 | 已创建 |
+| `core/Protocol.h` | 协议层接口定义 | ✅ 已完成 |
+| `core/Protocol.cpp` | 协议层实现 | ✅ 已完成 |
+| `core/NetworkClient.h` | 网络客户端接口 | ✅ 已完成 |
+| `core/NetworkClient.cpp` | 网络客户端实现 | ✅ 已完成 |
+| `services/` | 业务逻辑层目录 | ✅ 已完成 |
+| `docs/QtCSLearn/QtClient/` | 学习文档目录 | 持续更新 |
+| `draft/` | 测试代码目录 | 持续添加 |
+| `CMakeLists.txt` | 构建配置 | ✅ 已完成 |
+| `main.cpp` | 程序入口 | ✅ 已完成 |
 
 ### 服务器参考文件
 
-| 文件路径 | 作用 | 参考价值 |
-|---------|------|---------|
-| `VimUsing/LEARNING_GUIDE.md` | 服务器原理讲解 | ⭐⭐⭐⭐⭐ |
-| `VimUsing/src/protocol/Message.cpp` | 协议实现参考 | ⭐⭐⭐⭐⭐ |
-| `VimUsing/include/protocol/Message.h` | 协议接口定义 | ⭐⭐⭐⭐ |
-| `VimUsing/src/handlers/LoginHandler.cpp` | 登录逻辑参考 | ⭐⭐⭐ |
+服务器已部署到 Linux 服务器上，协议规范请参考本文档中的协议规范章节。
 
 ### 学习文档
 
 | 文件 | 内容 |
 |-----|------|
-| `OVERVIEW.md` | 项目总览和AI指导（本文档）|
-| `client/LEARNING-LOG.md` | 详细学习记录和知识点 |
-| `client/README.md` | 项目说明和构建步骤 |
+| `docs/QtCSLearn/QtClient/OVERVIEW.md` | 项目总览和AI指导（本文档）|
+| `docs/QtCSLearn/QtClient/LEARNING-LOG.md` | 详细学习记录和知识点 |
+| `docs/QtCSLearn/QtClient/AI-GUIDE.md` | AI助手指导文档 |
+| `README.md` | 项目说明和构建步骤 |
 
 ---
 
@@ -539,19 +544,19 @@ Payload：alice:password123 (18字节)
 
 ```bash
 # 查看项目结构
-ls -la client/
+ls -la
 
 # 查看已有的代码文件
-find client/ -name "*.cpp" -o -name "*.h" | grep -v build
+find . -name "*.cpp" -o -name "*.h" | grep -v build | grep -v ".git"
 
 # 查看测试代码
-ls -la client/draft/
+ls -la draft/
 
 # 查看学习日志
-cat client/claude.md
+cat docs/QtCSLearn/QtClient/LEARNING-LOG.md
 
 # 检查构建状态
-cd client/build && cmake .. && make
+mkdir -p build && cd build && cmake .. && make
 ```
 
 ---

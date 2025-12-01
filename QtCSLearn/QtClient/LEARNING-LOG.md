@@ -25,7 +25,7 @@
 - **架构兼容性：** 解决了ARM64 vs x86_64问题
 
 ### 3. Protocol协议类实现 ✓
-- **文件：** `client/core/Protocol.h` + `Protocol.cpp`
+- **文件：** `core/Protocol.h` + `Protocol.cpp`
 - **功能：** 消息的编码、解码和辅助函数
 
 #### Protocol 类设计原则
@@ -123,7 +123,7 @@ return true;
 - ✅ 分批接收处理（模拟真实网络）
 
 ### 4. NetworkClient 网络层实现 ✓
-- **文件：** `client/core/NetworkClient.h` + `NetworkClient.cpp`
+- **文件：** `core/NetworkClient.h` + `NetworkClient.cpp`
 - **功能：** 封装 QTcpSocket，提供异步网络通信接口
 
 #### 核心实现
@@ -183,7 +183,7 @@ while (Protocol::decodeMessage(receiveBuffer, msg)) {
 - ✅ 正常断开连接
 
 ### 5. EchoService 业务层实现 ✓
-- **文件：** `client/services/EchoService.h` + `EchoService.cpp`
+- **文件：** `services/EchoService.h` + `EchoService.cpp`
 - **功能：** 封装 Echo 业务逻辑，隐藏协议细节
 
 #### Service 层的职责
@@ -260,7 +260,7 @@ void EchoService::onMessageReceived(const Message& msg) {
 - ✅ 代码量减少 70%，可读性提升 100%
 
 ### 6. AuthService 登录认证服务实现 ✓
-- **文件：** `client/services/AuthService.h` + `AuthService.cpp`
+- **文件：** `services/AuthService.h` + `AuthService.cpp`
 - **功能：** 封装登录认证逻辑，处理成功/失败两种响应
 
 #### AuthService 与 EchoService 的关键区别
@@ -386,7 +386,7 @@ void AuthService::onMessageReceived(const Message& msg)
 ---
 
 ### 7. FileUploadService 文件上传服务 ✓ 已完成
-- **文件：** `client/services/FileUploadService.h` + `FileUploadService.cpp`
+- **文件：** `services/FileUploadService.h` + `FileUploadService.cpp`
 - **功能：** 文件分块上传、进度管理、状态跟踪
 
 #### 文件上传协议分析
@@ -805,7 +805,7 @@ emit uploadProgress(m_uploadedBytes, m_nTotalBytes);
 
 #### 测试与验证
 
-**测试程序**：`client/draft/test_FileUploadService.cpp`
+**测试程序**：`draft/test_FileUploadService.cpp`
 
 **测试结果**：
 - ✅ 编译成功（有警告，已修复）
@@ -1048,6 +1048,5 @@ connect(socket, QOverload<QAbstractSocket::SocketError>::of(&QTcpSocket::error),
 ## 📖 参考资料
 
 - Qt官方文档：QByteArray, QDataStream
-- VimUsing服务器代码：`VimUsing/src/protocol/Message.cpp` (encode/decode参考)
 - 测试代码：`draft/test_protocol.cpp` (编码测试), `draft/test_decode.cpp` (解码测试)
-- 协议文件：`client/core/Protocol.h`, `client/core/Protocol.cpp`
+- 协议文件：`core/Protocol.h`, `core/Protocol.cpp`

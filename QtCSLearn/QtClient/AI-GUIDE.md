@@ -4,9 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a **learning-focused project** consisting of two components:
-1. **VimUsing Server** (`VimUsing/`) - A completed Linux Epoll-based TCP server (reference only)
-2. **Qt Client** (`client/`) - An in-development Qt5-based cross-platform client (current focus)
+This is a **learning-focused project** for building a Qt5-based cross-platform client that connects to a VimUsing server (deployed separately on Linux).
 
 **Primary Goal**: Educational - guide learners through building a complete network client from scratch, understanding each concept before proceeding.
 
@@ -23,7 +21,6 @@ export PATH=$Qt5_DIR/bin:$PATH
 
 **Main Client:**
 ```bash
-cd client
 mkdir -p build && cd build
 cmake ..
 make
@@ -32,7 +29,7 @@ make
 
 **Protocol Tests (draft directory):**
 ```bash
-cd client/draft
+cd draft
 mkdir -p build && cd build
 cmake ..
 make
@@ -46,28 +43,28 @@ make
 
 ### Layered Design (dependencies flow downward only)
 ```
-UI Layer (client/ui/)
+UI Layer (ui/)
     ↓
-Services Layer (client/services/)
+Services Layer (services/)
     ↓
-Core Layer (client/core/)
+Core Layer (core/)
     - Protocol: Message encoding/decoding
-    - NetworkClient: TCP socket management (planned)
+    - NetworkClient: TCP socket management
 ```
 
 ### Key Files
 
 **Core Protocol Layer:**
-- `client/core/Protocol.h` - Protocol interface and message structures
-- `client/core/Protocol.cpp` - Implementation (encode/decode complete)
+- `core/Protocol.h` - Protocol interface and message structures
+- `core/Protocol.cpp` - Implementation (encode/decode complete)
 
 **Test Code:**
-- `client/draft/test_protocol.cpp` - Encoding tests
-- `client/draft/test_decode.cpp` - Decoding tests with packet fragmentation scenarios
+- `draft/test_protocol.cpp` - Encoding tests
+- `draft/test_decode.cpp` - Decoding tests with packet fragmentation scenarios
 
 **Configuration:**
-- `client/CMakeLists.txt` - Main build configuration
-- `client/draft/CMakeLists.txt` - Test programs configuration
+- `CMakeLists.txt` - Main build configuration
+- `draft/CMakeLists.txt` - Test programs configuration
 
 ## Protocol Specification
 
@@ -109,10 +106,10 @@ Core Layer (client/core/)
 **Next Step**: NetworkClient implementation with QTcpSocket
 
 ### Testing Strategy
-1. Write isolated tests in `client/draft/` to verify understanding
+1. Write isolated tests in `draft/` to verify understanding
 2. Once concept is validated, implement in main codebase
 3. Test edge cases: empty data, fragmentation, coalescing
-4. Cross-reference with server code (`VimUsing/src/protocol/Message.cpp`)
+4. Cross-reference with server protocol specification
 
 ### Planned Development Order
 1. ✅ Protocol implementation
@@ -142,8 +139,8 @@ Core Layer (client/core/)
    - Validate understanding through actual execution
 
 4. **Documentation Discipline**
-   - Update `client/claudeGuide.md` after learning sessions (detailed log)
-   - Update `ClientTaskOutlook.md` progress tracking
+   - Update learning documentation after sessions (detailed log)
+   - Update progress tracking documents
    - Compress completed topics, preserve key insights
 
 ### When Learner Encounters Issues
@@ -187,25 +184,24 @@ Core Layer (client/core/)
 
 ## Reference Materials
 
-**Server Implementation** (for protocol compatibility):
-- `VimUsing/src/protocol/Message.cpp` - Server-side encode/decode
-- `VimUsing/include/protocol/Message.h` - Protocol definitions
-- `VimUsing/LEARNING_GUIDE.md` - Server architecture explanation
+**Protocol Documentation**:
+- Server is deployed separately - refer to protocol specification in this guide
 
 **Learning Logs**:
-- `ClientTaskOutlook.md` - Project overview, progress tracking, AI guidelines
-- `client/claudeGuide.md` - Detailed learning journal with key insights
+- `docs/QtCSLearn/QtClient/OVERVIEW.md` - Project overview, progress tracking, AI guidelines
+- `docs/QtCSLearn/QtClient/LEARNING-LOG.md` - Detailed learning journal with key insights
 
 ## Project Structure Rules
 
 ### Directory Layout (DO NOT modify this structure)
 ```
-client/
+QtClient/           # Project root
 ├── core/           # Protocol, NetworkClient
 ├── services/       # AuthService, FileUploadService, EchoService
 ├── models/         # User, UploadTask data models
 ├── ui/             # LoginWindow, MainWindow
 ├── draft/          # Temporary test/learning code
+├── docs/           # Documentation (git submodule)
 └── main.cpp        # Entry point
 ```
 
